@@ -54,15 +54,28 @@ const Example = () => {
     });
   }
 
-  return (
-    <App>
-      <Window style={{ width: 700, height: 768, backgroundColor: 'white' }}>
+  function renderProcesses() {
+    console.log('akjshdkahjkd');
+    console.log(processData.length);
+
+    if (!processData.length) return;
+
+    return processData.map(data => {
+      return (
         <View>
-          <Text style={processStyle}>aksjdhahdjk</Text>
+          <Text style={processStyle}>{data.name}</Text>
           <TouchableHighlight style={{ backgroundColor: 'white' }}>
             <Text style={buttonStyle}>Terminate</Text>
           </TouchableHighlight>
         </View>
+      );
+    });
+  }
+
+  return (
+    <App>
+      <Window style={{ width: 700, height: 768, backgroundColor: 'white' }}>
+        {renderProcesses()}
       </Window>
     </App>
   );
