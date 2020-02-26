@@ -59,7 +59,7 @@ const Example = () => {
       <Window style={{ width: 700, height: 768, backgroundColor: 'white' }}>
         <View>
           <Text style={processStyle}>aksjdhahdjk</Text>
-          <TouchableHighlight style={{ backgroundColor: 'white' }} onPress={showAlert}>
+          <TouchableHighlight style={{ backgroundColor: 'white' }}>
             <Text style={buttonStyle}>Terminate</Text>
           </TouchableHighlight>
         </View>
