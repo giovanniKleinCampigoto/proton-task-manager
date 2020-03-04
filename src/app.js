@@ -12,16 +12,26 @@ import { exec } from 'child_process'
 
 const processStyle = {
   marginLeft: '24px',
-}
-
-const buttonStyle = {
-  backgroundColor: 'red',
+  flex: 1,
   textAlign: 'center',
 }
 
-const headerStyles = {
-  backgroundColor: '#9ea6ac',
+const buttonStyle = {
+  textAlign: 'center',
   margin: '24px',
+  border: 0,
+}
+
+const headerStyles = {
+  margin: '24px',
+  flexBasis: 0,
+  flexGrow: 1.5,
+  flex: 1,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'elipsis',
+  fontWeight: 'bold',
+  color: 'white',
 }
 
 const Example = () => {
@@ -29,9 +39,15 @@ const Example = () => {
 
   useEffect(() => {
     if (!processData.length) {
-      fetchRunningProcesses()
+      refreshProcesses()
     }
   }, [])
+
+  function refreshProcesses() {
+    setInterval(() => {
+      fetchRunningProcesses()
+    }, 2000)
+  }
 
   function fetchRunningProcesses() {
     const command = `ps -o pid,user,%mem,%cpu,command ax | sort -b -k3 -r | awk '{print $1"|"$2"|"$3"|"$4"|"$5";"}'`
@@ -72,9 +88,11 @@ const Example = () => {
       return (
         <View
           style={{
-            padding: '24px',
             flexDirection: 'row',
+            justifyContent: 'center',
             width: '100%',
+            backgroundColor: '#EBEFF4',
+            padding: '16px',
           }}
           key={index}
         >
@@ -82,12 +100,21 @@ const Example = () => {
           <Text style={processStyle}>{data.user}</Text>
           <Text style={processStyle}>{data.memory}</Text>
           <Text style={processStyle}>{data.cpu}</Text>
-          <Text style={processStyle}>{data.name}</Text>
+          <Text style={{ ...processStyle, marginRight: '16px' }}>
+            {data.name}
+          </Text>
           <TouchableHighlight
-            style={{ backgroundColor: 'white', maxWidth: '100px' }}
+            style={{
+              backgroundColor: '#6b75aa',
+              textAlign: 'center',
+              flex: 1,
+              justifyContent: 'center',
+              borderRadius: '4px',
+              height: '42px',
+            }}
             onPress={() => logPID(data.PID)}
           >
-            <Text style={buttonStyle}>Terminate</Text>
+            <Text style={buttonStyle}>Kill</Text>
           </TouchableHighlight>
         </View>
       )
@@ -98,15 +125,18 @@ const Example = () => {
     <App>
       <Window
         style={{
-          minWidth: 700,
+          minWidth: 1024,
           minHeight: 768,
           backgroundColor: 'white',
         }}
       >
         <View
           style={{
+            width: '100%',
             flexDirection: 'row',
-            background: '#9ea6ac',
+            justifyContent: 'center',
+            background: '#24292E',
+            overflow: 'scroll',
           }}
         >
           <Text style={headerStyles}>PID</Text>
@@ -114,6 +144,7 @@ const Example = () => {
           <Text style={headerStyles}>Memory %</Text>
           <Text style={headerStyles}>CPU %</Text>
           <Text style={headerStyles}>Process Name</Text>
+          <Text style={headerStyles}></Text>
         </View>
         {renderProcesses()}
       </Window>
