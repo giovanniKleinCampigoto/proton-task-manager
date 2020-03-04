@@ -34,6 +34,8 @@ const headerStyles = {
   color: 'white',
 }
 
+let interval = 0
+
 const Example = () => {
   const [processData, setProcessData] = useState([])
 
@@ -44,7 +46,7 @@ const Example = () => {
   }, [])
 
   function refreshProcesses() {
-    setInterval(() => {
+    interval = setInterval(() => {
       fetchRunningProcesses()
     }, 2000)
   }
@@ -77,8 +79,21 @@ const Example = () => {
     })
   }
 
-  function logPID(value) {
-    console.log(value)
+  function killProcess(value) {
+    clearInterval(interval)
+    const command = `kill ${value}`
+
+    exec(command, (err, stdout, stderr) => {
+      const processes = []
+      if (err) {
+        console.error(err)
+        return
+      }
+
+      console.log(`Process with the PID ${value} was terminated!`)
+      fetchRunningProcesses()
+      refreshProcesses()
+    })
   }
 
   function renderProcesses() {
@@ -112,7 +127,7 @@ const Example = () => {
               borderRadius: '4px',
               height: '42px',
             }}
-            onPress={() => logPID(data.PID)}
+            onPress={() => killProcess(data.PID)}
           >
             <Text style={buttonStyle}>Kill</Text>
           </TouchableHighlight>
