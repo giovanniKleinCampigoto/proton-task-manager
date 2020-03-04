@@ -34,8 +34,6 @@ const headerStyles = {
   color: 'white',
 }
 
-let interval = 0
-
 const Example = () => {
   const [processData, setProcessData] = useState([])
 
@@ -46,7 +44,7 @@ const Example = () => {
   }, [])
 
   function refreshProcesses() {
-    interval = setInterval(() => {
+    setInterval(() => {
       fetchRunningProcesses()
     }, 2000)
   }
@@ -80,7 +78,6 @@ const Example = () => {
   }
 
   function killProcess(value) {
-    clearInterval(interval)
     const command = `kill ${value}`
 
     exec(command, (err, stdout, stderr) => {
@@ -92,7 +89,6 @@ const Example = () => {
 
       console.log(`Process with the PID ${value} was terminated!`)
       fetchRunningProcesses()
-      refreshProcesses()
     })
   }
 
